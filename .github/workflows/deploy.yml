@@ -19,8 +19,9 @@ jobs:
           cache: 'pnpm'
 
       - name: Instalar pnpm
-        run: |
-          npm install -g pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8 # ou a versão que você preferir
 
       - name: Instalar dependências
         run: pnpm install
