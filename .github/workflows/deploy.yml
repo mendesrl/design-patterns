@@ -16,12 +16,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'pnpm'
 
       - name: Instalar pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8 # ou a versão que você preferir
+        run: npm install -g pnpm
 
       - name: Instalar dependências
         run: pnpm install
