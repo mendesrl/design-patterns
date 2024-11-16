@@ -1,176 +1,92 @@
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { Hero } from './types/Hero';
 import HelloWorld from './components/HelloWorld.vue'
+const heroes = ref < Hero[] > ([]);
+const loading = ref(true);
+const error = ref < string | null > (null);
+const token = 'f3f4548cc668c3a1a97fb5bf79567f27';
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`https://www.superheroapi.com/api.php/${token}/search/a`);
+    heroes.value = response.data.results;
+  } catch (err) {
+    error.value = 'Erro ao carregar a lista de super-heróis.';
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <template>
-  <span class="text-3xl font-bold underline">
-    oiiii
-  </span>
-  <button class="btn">Hello daisyUI</button>
-  <h1>
-    Hello world!
-  </h1>
-  <div>
+  <h1>Lista de Super-Heróis</h1>
+  <div v-if="loading">Carregando...</div>
+  
+  <div v-else>
     <div class="overflow-x-auto">
-  <table class="table">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <th>Name</th>
-        <th>Job</th>
-        <th>Favorite Color</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- row 1 -->
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <div class="flex items-center gap-3">
-            <div class="avatar">
-              <div class="mask mask-squircle h-12 w-12">
-                <img
-                  src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                  alt="Avatar Tailwind CSS Component" />
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th>
+              <label>
+                <input type="checkbox" class="checkbox" />
+              </label>
+            </th>
+            <th>Hero name</th>
+            <th>Biography</th>
+            <th>Connections</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- row 1 -->
+          <tr v-for="hero in heroes" :key="hero.id">
+            <th>
+              <label>
+                <input type="checkbox" class="checkbox" />
+              </label>
+            </th>
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle h-12 w-12">
+                    <img :src="hero.image.url" :alt="hero.name" />
+                    alt="Avatar Tailwind CSS Component" />
+                  </div>
+                </div>
+                <div>
+                  <div class="font-bold">{{ hero.name }}</div>
+                  <div class="text-sm opacity-50">{{ hero.biography['place-of-birth'] }}</div>
+                </div>
               </div>
-            </div>
-            <div>
-              <div class="font-bold">Hart Hagerty</div>
-              <div class="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          Zemlak, Daniel and Leannon
-          <br />
-          <span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
-        </td>
-        <td>Purple</td>
-        <th>
-          <button class="btn btn-ghost btn-xs">details</button>
-        </th>
-      </tr>
-      <!-- row 2 -->
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <div class="flex items-center gap-3">
-            <div class="avatar">
-              <div class="mask mask-squircle h-12 w-12">
-                <img
-                  src="https://img.daisyui.com/images/profile/demo/3@94.webp"
-                  alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div class="font-bold">Brice Swyre</div>
-              <div class="text-sm opacity-50">China</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          Carroll Group
-          <br />
-          <span class="badge badge-ghost badge-sm">Tax Accountant</span>
-        </td>
-        <td>Red</td>
-        <th>
-          <button class="btn btn-ghost btn-xs">details</button>
-        </th>
-      </tr>
-      <!-- row 3 -->
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <div class="flex items-center gap-3">
-            <div class="avatar">
-              <div class="mask mask-squircle h-12 w-12">
-                <img
-                  src="https://img.daisyui.com/images/profile/demo/4@94.webp"
-                  alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div class="font-bold">Marjy Ferencz</div>
-              <div class="text-sm opacity-50">Russia</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          Rowe-Schoen
-          <br />
-          <span class="badge badge-ghost badge-sm">Office Assistant I</span>
-        </td>
-        <td>Crimson</td>
-        <th>
-          <button class="btn btn-ghost btn-xs">details</button>
-        </th>
-      </tr>
-      <!-- row 4 -->
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" class="checkbox" />
-          </label>
-        </th>
-        <td>
-          <div class="flex items-center gap-3">
-            <div class="avatar">
-              <div class="mask mask-squircle h-12 w-12">
-                <img
-                  src="https://img.daisyui.com/images/profile/demo/5@94.webp"
-                  alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div class="font-bold">Yancy Tear</div>
-              <div class="text-sm opacity-50">Brazil</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          Wyman-Ledner
-          <br />
-          <span class="badge badge-ghost badge-sm">Community Outreach Specialist</span>
-        </td>
-        <td>Indigo</td>
-        <th>
-          <button class="btn btn-ghost btn-xs">details</button>
-        </th>
-      </tr>
-    </tbody>
-    <!-- foot -->
-    <tfoot>
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Job</th>
-        <th>Favorite Color</th>
-        <th></th>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+            </td>
+            <td>
+              {{ hero.biography['full-name'] }}
+              <br />
+              <span class="badge badge-ghost badge-sm">{{ hero.biography.publisher }}</span>
+            </td>
+            <td>{{ hero.connections.relatives }}</td>
+
+          </tr>
+        </tbody>
+        <!-- foot -->
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
-  <HelloWorld msg="DS" />
+
+  <div v-if="error" class="error">{{ error }}</div>
 </template>
 
 <style scoped>
@@ -180,9 +96,11 @@ import HelloWorld from './components/HelloWorld.vue'
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
